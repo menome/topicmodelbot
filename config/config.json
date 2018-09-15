@@ -4,12 +4,12 @@
     "enable": true,
     "url": "bolt://localhost",
     "user": "neo4j",
-    "pass": ""
+    "pass": "graphPaper!"
   },
   "rabbit": {
     "enable": true,
     "url": "amqp://rabbitmq:rabbitmq@localhost:5672?heartbeat=3600",
-    "routingKey": "fpp.fulltext",
+    "routingKey": "fpp.topicmodels",
     "exchange": "fpp",
     "exchangeType": "topic"
   },
@@ -23,7 +23,7 @@
     "enable": true,
     "host": "http://localhost:3020",
     "username": "botuser",
-    "password": ""
+    "password": "UzTSy9zp46kKhTT6"
   },
   "downstream_actions": {
     "success": false,
