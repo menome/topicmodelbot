@@ -39,7 +39,7 @@ module.exports = function(bot) {
       
       return bot.tm.modelText(ft).then((topics) => {
         var harvesterMessage = {
-          'NodeType': 'File',
+          'NodeType': 'Card',
           'Priority':2,
           'ConformedDimensions': {
             'Uuid': msg.Uuid
