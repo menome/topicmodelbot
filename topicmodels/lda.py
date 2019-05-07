@@ -20,7 +20,7 @@ class TopicModeler():
     def getTopics(self):
         topics = self.lda.show_topics(num_topics=-1, num_words=15, log=False, formatted=False)
         #topics = self.lda.get_topics()
-        print(topics)
+        #print(topics)
         json_topics = {}
         for _,(id,wordlist) in enumerate(topics):
             json_wordlist = {}
