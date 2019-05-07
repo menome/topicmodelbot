@@ -1,3 +1,0 @@
-gensim
-NLTK
-stop_words

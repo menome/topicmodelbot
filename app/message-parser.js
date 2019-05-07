@@ -1,5 +1,6 @@
 "use strict";
 const RabbitClient = require('@menome/botframework/rabbitmq');
+const helpers = require("./helpers");
 
 module.exports = function(bot) {
   var outQueue = new RabbitClient(bot.config.get('rabbit_outgoing'));
@@ -8,8 +9,7 @@ module.exports = function(bot) {
   // First ingestion point.
   this.handleMessage = function(msg) {
     return processMessage(msg).then((resultStr) => {
-      var downstream_actions = bot.config.get('downstream_actions');
-      var newRoute = downstream_actions[resultStr];
+      var newRoute = helpers.getNextRoutingKey(resultStr, bot);
 
       if(newRoute === false || newRoute === undefined) {
         return bot.logger.info("No next routing key.");
@@ -39,7 +39,7 @@ module.exports = function(bot) {
       
       return bot.tm.modelText(ft).then((topics) => {
         var harvesterMessage = {
-          'NodeType': 'File',
+          'NodeType': 'Card',
           'Priority':2,
           'ConformedDimensions': {
             'Uuid': msg.Uuid
