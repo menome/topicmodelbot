@@ -15,16 +15,17 @@ from gensim import corpora, models, similarities, parsing
 class TopicModeler():
     def __init__(self):
         self.dictionary = corpora.Dictionary.load_from_text(os.environ.get("DICT_ADDRESS","../config/vocab.dict"))
-        self.lda = models.LdaModel.load(os.environ.get("LDA_MODEL_ADDRESS","../config/lda_model.lda"))
+        self.lda = models.LdaModel.load(os.environ.get("LDA_MODEL_ADDRESS","../config/model.lda"))
 
     def getTopics(self):
         topics = self.lda.show_topics(num_topics=-1, num_words=15, log=False, formatted=False)
-
+        #topics = self.lda.get_topics()
+        print(topics)
         json_topics = {}
         for _,(id,wordlist) in enumerate(topics):
             json_wordlist = {}
             for _,(name,weight) in enumerate(wordlist):
-                json_wordlist[name] = weight
+                json_wordlist[name] = str(weight)
             json_topics[id] = json_wordlist
         return json.dumps(json_topics)
       

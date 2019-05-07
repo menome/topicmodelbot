@@ -1,7 +1,7 @@
 {
   "name": "fpp-topicmodel",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Assigns topics to files",
   "repository": "https://github.com/menome",
   "license": "Commercial",
