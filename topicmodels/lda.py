@@ -32,19 +32,24 @@ class TopicModeler():
     def modelText(self,text):
         #Now we neeed to perform pre-processing on the fulltext from the node
         #That is to say. Lowercased and stemmed and stopworded
+        #pytprint self.getTopics()
         doc = parsing.preprocessing.preprocess_string(text)
-
         # Then turn it into a bow
-        vec_bow = corpora.Dictionary.doc2bow(self.dictionary, doc)
-
+        
+        #print doc
+        vec_bow = self.dictionary.doc2bow(doc, return_missing=True)
+        #print vec_bow
+        #tmp = self.lda.get_document_topics(vec_bow)
         #model that shiet with that lda bitch
+        #print tmp[1]
         doc_topics = sorted(self.lda[vec_bow],key=lambda x: x[1],reverse=True)
+        #print doc_topics
 
         json_topics = {}
         for _,topic in enumerate(doc_topics):
-            json_topics[topic[0]] = topic[1]
-
-        return json.dumps(json_topics)
+            json_topics[topic[0]] = (topic[1])
+        #print "boop"
+        return json.dumps(str(json_topics))
       
 ## Entrypoint
 def main():
