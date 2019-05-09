@@ -23,9 +23,12 @@ module.exports = function(bot) {
    */
   this.modelText = function(text) {
     return new Promise((resolve,reject) => {
+      bot.logger.info(text);
       var child = execFile("python",["../topicmodels/lda.py", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess stderr:", stderr);
+          bot.logger.error(err);
+          bot.logger.error("Out: " + stdout)
           return reject(err);
         }
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.        
