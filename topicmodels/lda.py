@@ -37,19 +37,16 @@ class TopicModeler():
         # Then turn it into a bow
         
         #print doc
-        vec_bow = self.dictionary.doc2bow(doc, return_missing=True)
-        #print vec_bow
-        #tmp = self.lda.get_document_topics(vec_bow)
-        #model that shiet with that lda bitch
-        #print tmp[1]
-        doc_topics = sorted(self.lda[vec_bow],key=lambda x: x[1],reverse=True)
-        #print doc_topics
+        vec_bow = self.dictionary.doc2bow(doc)
+        topics = self.lda.get_document_topics(vec_bow)
 
+        # Sorting is irrelevant because we're encoding to JSON below
+        # doc_topics = sorted(tmp[0],key=lambda x: x[1],reverse=True)
         json_topics = {}
-        for _,topic in enumerate(doc_topics):
-            json_topics[topic[0]] = (topic[1])
-        #print "boop"
-        return json.dumps(str(json_topics))
+        for _,topic in enumerate(topics):
+            json_topics[topic[0]] = float(topic[1])
+
+        return json.dumps(json_topics)
       
 ## Entrypoint
 def main():
@@ -68,6 +65,7 @@ def main():
             with open(args.input) as data:
                     print tm.modelText(data.read())      
     except Exception as ex:
+        print("Caught Exception")
         print(ex)
         exit(1)
 
