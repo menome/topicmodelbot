@@ -1,6 +1,7 @@
 "use strict";
 const RabbitClient = require('@menome/botframework/rabbitmq');
 const helpers = require("./helpers");
+const natural = require("natural");
 
 module.exports = function(bot) {
   var outQueue = new RabbitClient(bot.config.get('rabbit_outgoing'));
@@ -37,6 +38,15 @@ module.exports = function(bot) {
     return bot.neo4j.query("MATCH (c:Card {Uuid: $uuid}) RETURN c.FullText as fulltext", {uuid: msg.Uuid}).then((result) => {
       var ft = result.records[0].get('fulltext');
       
+      // Do some tokenization and trimming.
+      // Also compute some spell checking.
+      let tokenizer = new natural.WordTokenizer();
+      let tokens = tokenizer.tokenize(ft);
+      let trimmedFulltext = helpers.removeStopWordsFromArray(natural.LancasterStemmer.tokenizeAndStem(ft)).join(" ")
+      let wordcount = tokens.length;
+      let totalSpelledCorrectly = helpers.spellCheckList(tokens)
+      let correctSpellingRatio = totalSpelledCorrectly / wordcount;
+
       return bot.tm.modelText(ft).then((topics) => {
         var harvesterMessage = {
           'NodeType': 'Card',
@@ -44,7 +54,11 @@ module.exports = function(bot) {
           'ConformedDimensions': {
             'Uuid': msg.Uuid
           },
-          'Properties': {},
+          'SourceSystem': 'topicmodelbot',
+          'Properties': {
+            CorrectSpellingRatio: correctSpellingRatio !== 0 ? correctSpellingRatio : undefined,
+            FulltextKeywords: trimmedFulltext
+          },
           'Connections': []
         }
 
