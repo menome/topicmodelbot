@@ -35,7 +35,7 @@ module.exports = function(bot) {
   // Internal/Helper functions
 
   function processMessage(msg) {
-    return bot.neo4j.query("MATCH (c:Card {Uuid: $uuid}) RETURN c.FullText as fulltext", {uuid: msg.Uuid}).then((result) => {
+    return bot.neo4j.query("MATCH (c {Uuid: $uuid}) RETURN c.FullText as fulltext", {uuid: msg.Uuid}).then((result) => {
       var ft = result.records[0].get('fulltext');
       
       // Do some tokenization and trimming.

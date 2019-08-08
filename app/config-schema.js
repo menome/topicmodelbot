@@ -48,10 +48,19 @@ module.exports = {
       })
     }
   },
-  num_topic_links: {
-    doc: "Number of topics to link to in the graph",
-    format: Number,
-    default: 5,
-    env: "NUM_TOPIC_LINKS" 
+  topicmodels: {
+    num_topic_links: {
+      doc: "Number of topics to link to in the graph",
+      format: Number,
+      default: 5,
+      env: "NUM_TOPIC_LINKS" 
+    },
+    modledir:{
+      doc:"the location to save models to",
+      format: String,
+      default:"../models/",
+      env:"MODEL_DIR"
+    }
   }
+
 }

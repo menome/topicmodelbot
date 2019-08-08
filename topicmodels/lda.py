@@ -14,8 +14,8 @@ from gensim import corpora, models, similarities, parsing
 
 class TopicModeler():
     def __init__(self):
-        self.dictionary = corpora.Dictionary.load_from_text(os.environ.get("DICT_ADDRESS","../config/vocab.dict"))
-        self.lda = models.LdaModel.load(os.environ.get("LDA_MODEL_ADDRESS","../config/model.lda"))
+        self.dictionary = corpora.Dictionary.load_from_text(os.environ.get("DICT_ADDRESS","../models/vocab.dict"))
+        self.lda = models.LdaModel.load(os.environ.get("LDA_MODEL_ADDRESS","../models/model.lda"))
 
     def getTopics(self):
         topics = self.lda.show_topics(num_topics=-1, num_words=15, log=False, formatted=False)
@@ -58,12 +58,12 @@ def main():
     try:
         tm = TopicModeler()
         if args.list:
-            print tm.getTopics()
+            print (tm.getTopics())
         elif args.input == '-':
-            print tm.modelText(sys.stdin.read())
+            print (tm.modelText(sys.stdin.read()))
         else:
             with open(args.input) as data:
-                    print tm.modelText(data.read())      
+                    print (tm.modelText(data.read()))   
     except Exception as ex:
         print("Caught Exception")
         print(ex)

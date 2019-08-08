@@ -38,3 +38,11 @@ module.exports.mergeWord = function(word, topicCode, tmChecksum, weight) {
   query.return("w.Uuid as uuid")
   return query;
 }
+
+module.exports.resetQuery = function(){
+  var query = new Query();
+  query.match("(t:Topic:Word) detach delete t");
+  query.match("(f:Meta {Type: 'topicmodel') detach delete f", {checksum, botname: name})
+
+  return query;
+}

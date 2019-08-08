@@ -1,6 +1,6 @@
-# FPP Topic Models Bot
+# FPP Topic Models Bot ADVANCED MODEL
 
-Takes fulltext from files. Runs LDA topic models.
+Takes fulltext from files. Runs LDA topic models. Generates new models. Hotswaps models. Reclassifies a graph. 
 
 ## Set Up
 
