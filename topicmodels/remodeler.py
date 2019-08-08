@@ -44,7 +44,7 @@ class TopicModeler():
 
             ##now we want to pull our list of uuids for data to model
             uuids = session.read_transaction(lambda tx: getUuids(tx))
-            uuids = uuids[0:5]
+            #uuids = uuids[0:5]
 
             #now we load the fulltexts so we can start to build a dictionary
             tokensArray = []
