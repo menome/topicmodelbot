@@ -41,7 +41,7 @@ class TopicModeler():
             driver = GraphDatabase.driver(uri, auth=(user,password),encrypted=True)
             session = driver.session()
 
-
+            print("Getting Uuids")
             ##now we want to pull our list of uuids for data to model
             uuids = session.read_transaction(lambda tx: getUuids(tx))
             #uuids = uuids[0:5]
