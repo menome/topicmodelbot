@@ -59,7 +59,7 @@ module.exports = function(bot) {
    */
   this.generateModel = function(numTopics, numPasses, updateAfter){
     return new Promise((resolve,reject) => {    
-      execFile("python3",["../topicmodels/remodeler.py", "-g", numTopics, numPasses, updateAfter],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr);
           return reject(err);
