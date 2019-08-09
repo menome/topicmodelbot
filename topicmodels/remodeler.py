@@ -67,7 +67,8 @@ class TopicModeler():
             save_location = os.environ.get("MODEL_DIR",data['topicmodels']['modledir']) + str(datetime.datetime.now().date()) + '/'
             try:
                 os.makedirs(save_location)
-            except FileExistsError:
+            except:
+                #print("directory exists, continuing.")
                 continue
 
 
