@@ -68,7 +68,7 @@ class TopicModeler():
             try:
                 os.makedirs(save_location)
             except FileExistsError:
-                #print("Directory " , save_location ,  " already exists")
+                continue
 
 
             #now we need to create and save our dictionary
