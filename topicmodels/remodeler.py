@@ -26,7 +26,7 @@ class TopicModeler():
 
 
 
-    def generateModel(self, numTopics, numPasses, updateAfter):
+    def generateModel(self, numTopics, numPasses, updateAfter, destination):
         with open(self.CONFIG_ADDRESS) as cfg:
             data = json.load(cfg)
 
@@ -64,7 +64,7 @@ class TopicModeler():
                 tokensArray.append(tokens)
 
             ##set up a location to save the model to
-            save_location = os.environ.get("MODEL_DIR",data['topicmodels']['modledir']) + str(datetime.datetime.now().date()) + '/'
+            save_location = os.environ.get("MODEL_DIR",data['topicmodels']['modledir']) + destination + '/'
             try:
                 os.makedirs(save_location)
             except:
@@ -100,13 +100,14 @@ def main():
     parser.add_argument("numTopics", type=int)
     parser.add_argument("numPasses", type=int)
     parser.add_argument("updateAfter", type=int)
+    parser.add_argument("destination", type=str)
 
     args = parser.parse_args()
     #print(args.numPasses)
 
     try:
         tm = TopicModeler()
-        print (tm.generateModel(args.numTopics, args.numPasses, args.updateAfter))  
+        print (tm.generateModel(args.numTopics, args.numPasses, args.updateAfter, args.destination))  
     except Exception as ex:
         print("Caught Exception")
         print(ex)

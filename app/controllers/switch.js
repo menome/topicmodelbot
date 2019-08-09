@@ -2,11 +2,11 @@ var helpers = require('@menome/botframework/helpers')
 const dateformat = require('dateformat');
 
 module.exports.swaggerDef = {
-  "/remodel": {
-    "x-swagger-router-controller": "remodel",
+  "/switch": {
+    "x-swagger-router-controller": "switch",
     "post": {
-      "summary": "Re runs classification on documents in graph",
-      "description": "Re runs classification on on documents in graph",
+      "summary": "switches topic models in graph",
+      "description": "switches topic models in graph",
       "parameters": [
         {
             "name": "model",

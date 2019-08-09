@@ -41,8 +41,11 @@ module.exports.mergeWord = function(word, topicCode, tmChecksum, weight) {
 
 module.exports.resetQuery = function(){
   var query = new Query();
-  query.match("(t:Topic:Word) detach delete t");
-  query.match("(f:Meta {Type: 'topicmodel') detach delete f", {checksum, botname: name})
+  query.match("(t:Topic) detach delete t");
+  query.with("t");
+  query.match("(w:Word) detach delete w");
+  query.with("w");
+  query.match("(f:Meta {Type: $type}) detach delete f",{type:'topicmodel'})
 
   return query;
 }

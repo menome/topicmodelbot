@@ -60,6 +60,12 @@ module.exports = {
       format: String,
       default:"../models/",
       env:"MODEL_DIR"
+    },
+    used_model:{
+      doc:"the location of the model to use",
+      format: String,
+      default:"../models/live/",
+      env:"MODEL_ADDRESS"
     }
   }
 

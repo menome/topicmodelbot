@@ -4,7 +4,7 @@
 const { execFile } = require('child_process');
 const crypto = require('crypto');
 const QueryBuilder = require('./queryBuilder');
-
+var ncp = require('ncp').ncp;
 module.exports = function(bot) {
   this.getTopics = function() {
     return new Promise((resolve,reject) => {
@@ -33,7 +33,7 @@ module.exports = function(bot) {
         }
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.        
 
-        var num_topics = bot.config.get('num_topic_links');
+        var num_topics = bot.config.get('topicmodels')['num_topic_links'];
         var relevant_topic_keys = Object.keys(topics).sort((a,b) => {
           return topics[a] - topics[b];
         }).slice(0,num_topics)
@@ -57,15 +57,17 @@ module.exports = function(bot) {
    * Connects to a graph and pulls fulltext for new model generation
    * @param {*} NumTopics The number of topics to generate
    */
-  this.generateModel = function(numTopics, numPasses, updateAfter){
-    return new Promise((resolve,reject) => {    
-      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+  this.generateModel = function(numTopics, numPasses, updateAfter,dest){
+    return new Promise((resolve,reject) => {
+      bot.logger.info("Generating new model to: " + dest);
+      var destination = (dest ? dest: new Date(Date.now()).toISOString())
+      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr);
           return reject(err);
         }
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.
-        bot.logger.info("Topics created: " + topics.length)        
+        bot.logger.info("Topics created: " + topics)        
         return resolve(topics);
       })
     })
@@ -76,12 +78,19 @@ module.exports = function(bot) {
   * @param {*} modelLocation the model to switch to
   */
   this.switchModel = function(modelLocation){
-      process.env.DICT_ADDRESS =__dirname+ '/../models/' + modelLocation + '/vocab.dict'
-      process.env.LDA_MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/model.lda'
-      var resetQuery = QueryBuilder.resetQuery();
-      return bot.neo4j.query(resetQuery.compile(), resetQuery.params()).then((result) => {
-        this.initialize();
+      // process.env.MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/vocab.dict'
+      // process.env.MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/model.lda'
+      //copy model location files to usage location
+      bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/')
+      bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['used_model']);
+      return ncp(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/' , __dirname+ "/"+ bot.config.get('topicmodels')['used_model'], function(err){
+        bot.logger.error(err);
+        var resetQuery = QueryBuilder.resetQuery();
+        return bot.neo4j.query(resetQuery.compile(), resetQuery.params()).then((result) => {
+          bot.tm.initialize();
+        })       
       })
+
   }
 
 

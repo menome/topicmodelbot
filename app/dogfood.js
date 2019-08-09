@@ -8,11 +8,11 @@ module.exports = function(bot){
 
 
     this.remodel = function(){
-        selfQueue = new RabbitClient(bot.config.get('rabbit'));
-        selfQueue.connect();
+        //selfQueue = new RabbitClient(bot.config.get('rabbit'));
+        //selfQueue.connect();
         
         var query = getDocumentKeysQuery();
-        bot.query(query.compile(),query.params())
+        bot.neo4j.query(query.compile(),query.params())
         .then(function(results){
             results.records.forEach(function(element){
                 bot.logger.info(JSON.stringify(element));
@@ -21,10 +21,16 @@ module.exports = function(bot){
                     "Library":"na",
                     "Path":"na"
                 }
-                selfQueue.publish(tm);
+                bot.rabbit.publishMessage(tm);
             })
            
         })
+    }
+
+    function getDocumentKeysQuery(){
+        var query = new Query();
+        query.match("(f) WHERE f.FullText <> '' RETURN f.Uuid as Key")
+        return query;
     }
 }
 

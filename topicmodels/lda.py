@@ -14,8 +14,8 @@ from gensim import corpora, models, similarities, parsing
 
 class TopicModeler():
     def __init__(self):
-        self.dictionary = corpora.Dictionary.load_from_text(os.environ.get("DICT_ADDRESS","../models/vocab.dict"))
-        self.lda = models.LdaModel.load(os.environ.get("LDA_MODEL_ADDRESS","../models/model.lda"))
+        self.dictionary = corpora.Dictionary.load_from_text(os.environ.get("MODEL_ADDRESS","../models/live/") + "vocab.dict")
+        self.lda = models.LdaModel.load(os.environ.get("MODEL_ADDRESS","../models/live/")+ "model.lda") 
 
     def getTopics(self):
         topics = self.lda.show_topics(num_topics=-1, num_words=15, log=False, formatted=False)

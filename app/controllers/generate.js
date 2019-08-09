@@ -9,6 +9,13 @@ module.exports.swaggerDef = {
       "description": "Generates a new LDA model based on documents in graph",
       "parameters": [
         {
+          "name": "dest",
+          "in": "query",
+          "required": false,
+          "description": "folder to put model in",
+          "type": "string"
+        },
+        {
           "name": "numtopics",
           "in": "query",
           "required": true,
@@ -46,7 +53,8 @@ module.exports.post = function (req, res) {
   var numTopics = req.swagger.params.numtopics.value;
   var numPasses = req.swagger.params.numpasses.value;
   var updateAfter = req.swagger.params.updateafter.value;
-
+  var destination = req.swagger.params.dest.value;
+  req.bot.logger.info(req.swagger.params.dest.value)
   res.send(
     helpers.responseWrapper({
       status: "success",
@@ -54,6 +62,6 @@ module.exports.post = function (req, res) {
     })
   )
   
-  return req.tm.generateModel(numTopics, numPasses, updateAfter);
+  return req.tm.generateModel(numTopics, numPasses, updateAfter,destination);
   
 }
