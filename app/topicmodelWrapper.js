@@ -64,7 +64,8 @@ module.exports = function(bot) {
           bot.logger.error("Python subprocess failed:", stderr);
           return reject(err);
         }
-        var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.        
+        var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.
+        bot.logger.info("Topics created: " + topics.length)        
         return resolve(topics);
       })
     })
