@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.7.4-stretch
 
 EXPOSE 80
 ENV PORT 80
