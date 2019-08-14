@@ -8,7 +8,7 @@ var ncp = require('ncp').ncp;
 module.exports = function(bot) {
   this.getTopics = function() {
     return new Promise((resolve,reject) => {
-      execFile("python",["../topicmodels/lda.py", "-l", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      execFile("python3",["../topicmodels/lda.py", "-l", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr);
           return reject(err);
@@ -25,7 +25,7 @@ module.exports = function(bot) {
    */
   this.modelText = function(text) {
     return new Promise((resolve,reject) => {
-      var child = execFile("python",["../topicmodels/lda.py", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      var child = execFile("python3",["../topicmodels/lda.py", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess stderr:", stderr);
           bot.logger.error(err);
@@ -61,7 +61,7 @@ module.exports = function(bot) {
     return new Promise((resolve,reject) => {
       bot.logger.info("Generating new model to: " + dest);
       var destination = (dest ? dest: new Date(Date.now()).toISOString())
-      execFile("python",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr);
           return reject(err);
@@ -78,18 +78,18 @@ module.exports = function(bot) {
   * @param {*} modelLocation the model to switch to
   */
   this.switchModel = function(modelLocation){
-      // process.env.MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/vocab.dict'
-      // process.env.MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/model.lda'
-      //copy model location files to usage location
-      bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/')
-      bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['used_model']);
-      return ncp(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/' , __dirname+ "/"+ bot.config.get('topicmodels')['used_model'], function(err){
-        bot.logger.error(err);
-        var resetQuery = QueryBuilder.resetQuery();
-        return bot.neo4j.query(resetQuery.compile(), resetQuery.params()).then((result) => {
-          bot.tm.initialize();
-        })       
-      })
+    // process.env.MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/vocab.dict'
+    // process.env.MODEL_ADDRESS =__dirname+ '/../models/' + modelLocation + '/model.lda'
+    //copy model location files to usage location
+    bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/')
+    bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['used_model']);
+    return ncp(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/' , __dirname+ "/"+ bot.config.get('topicmodels')['used_model'], function(err){
+      bot.logger.error(err);
+      var resetQuery = QueryBuilder.resetQuery();
+      return bot.neo4j.query(resetQuery.compile(), resetQuery.params()).then(() => {
+        bot.tm.initialize();
+      })       
+    })
 
   }
 
