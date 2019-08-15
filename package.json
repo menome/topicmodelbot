@@ -1,12 +1,12 @@
 {
   "name": "fpp-advanced-topic-modelling-bot",
   "private": true,
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Assigns topics to files, generates new models.",
   "repository": "https://github.com/menome",
   "license": "Commercial",
   "dependencies": {
-    "@menome/botframework": "^2.1.14",
+    "@menome/botframework": "^2.2.5",
     "dateformat": "^3.0.3",
     "decypher": "^0.11.0",
     "forever": "^0.15.3",

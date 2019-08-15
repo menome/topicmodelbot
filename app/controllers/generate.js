@@ -1,5 +1,4 @@
 var helpers = require('@menome/botframework/helpers')
-const dateformat = require('dateformat');
 
 module.exports.swaggerDef = {
   "/generate": {

@@ -1,11 +1,11 @@
 var helpers = require('@menome/botframework/helpers')
 
 module.exports.swaggerDef = {
-  "/remodel": {
-    "x-swagger-router-controller": "remodel",
+  "/toggle": {
+    "x-swagger-router-controller": "toggle",
     "post": {
-      "summary": "Re runs classification on documents in graph",
-      "description": "Re runs classification on on documents in graph",
+      "summary": "turns on and off rabbit listener",
+      "description": "toggles the rabbit listener so this bot flips its",
       "parameters": [
       ],
       "responses": {
@@ -21,14 +21,16 @@ module.exports.swaggerDef = {
 }
 
 module.exports.post = function (req, res) {
+  
+  
 
   res.send(
     helpers.responseWrapper({
       status: "success",
-      message: "Starting the classifier"
+      message: "toggled successfully"
     })
   )
   
-  return req.df.remodel();
+  return   req.tr()
   
 }

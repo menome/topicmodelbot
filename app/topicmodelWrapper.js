@@ -85,7 +85,9 @@ module.exports = function(bot) {
     bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/')
     bot.logger.info(__dirname+ "/"+ bot.config.get('topicmodels')['used_model']);
     return ncp(__dirname+ "/"+ bot.config.get('topicmodels')['modledir'] + modelLocation + '/' , __dirname+ "/"+ bot.config.get('topicmodels')['used_model'], function(err){
-      bot.logger.error(err);
+      if(err){
+        bot.logger.error(err);
+      }
       var resetQuery = QueryBuilder.resetQuery();
       return bot.neo4j.query(resetQuery.compile(), resetQuery.params()).then(() => {
         bot.tm.initialize();

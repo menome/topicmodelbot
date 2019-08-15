@@ -1,5 +1,4 @@
 var helpers = require('@menome/botframework/helpers')
-const dateformat = require('dateformat');
 
 module.exports.swaggerDef = {
   "/switch": {
@@ -9,11 +8,11 @@ module.exports.swaggerDef = {
       "description": "switches topic models in graph",
       "parameters": [
         {
-            "name": "model",
-            "in": "query",
-            "required": true,
-            "description": "location of model to switch to",
-            "type": "string"
+          "name": "model",
+          "in": "query",
+          "required": true,
+          "description": "location of model to switch to",
+          "type": "string"
         }
       ],
       "responses": {
@@ -29,7 +28,7 @@ module.exports.swaggerDef = {
 }
 
 module.exports.post = function (req, res) {
-    var modelLocation = req.swagger.params.model.value;
+  var modelLocation = req.swagger.params.model.value;
 
   res.send(
     helpers.responseWrapper({

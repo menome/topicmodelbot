@@ -1,16 +1,12 @@
-const RabbitClient = require('@menome/botframework/rabbitmq');
 var Query = require('decypher').Query;
 
 
 module.exports = function(bot){
-    bot.logger.error("remodeller initialized");
+    bot.logger.info("remodeller initialized");
 
 
 
-    this.remodel = function(){
-        //selfQueue = new RabbitClient(bot.config.get('rabbit'));
-        //selfQueue.connect();
-        
+    this.remodel = function(){        
         var query = getDocumentKeysQuery();
         bot.neo4j.query(query.compile(),query.params())
         .then(function(results){
@@ -22,15 +18,15 @@ module.exports = function(bot){
                     "Path":"na"
                 }
                 bot.rabbit.publishMessage(tm);
-            })
-           
+        })
+            
         })
     }
 
     function getDocumentKeysQuery(){
-        var query = new Query();
-        query.match("(f) WHERE f.FullText <> '' RETURN f.Uuid as Key")
-        return query;
-    }
+    var query = new Query();
+    query.match("(f) WHERE f.FullText <> '' RETURN f.Uuid as Key")
+    return query;
+}
 }
 
