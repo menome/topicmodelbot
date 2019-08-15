@@ -15,9 +15,6 @@ module.exports = function(bot) {
         }
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.        
         return resolve(topics);
-      }).catch((err) => {
-        bot.logger.error("Python Error:", err)
-        return reject(err);
       })
     })
   }
@@ -47,9 +44,6 @@ module.exports = function(bot) {
         })
 
         return resolve(relevant_topics);
-      }).catch((err) => {
-        bot.logger.error("Python Error:", err)
-        return reject(err);
       })
     
       
@@ -76,9 +70,6 @@ module.exports = function(bot) {
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.
         bot.logger.info("Topics created: " + topics)        
         return resolve(topics);
-      }).catch((err) => {
-        bot.logger.error("Python Error:", err)
-        return reject(err);
       })
     })
   }
