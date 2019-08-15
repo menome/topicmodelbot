@@ -31,9 +31,9 @@ class TopicModeler():
             data = json.load(cfg)
 
             # Load DB info. Let os environment variables override this.
-            uri = os.environ.get("DB_ADDRESS",data['neo4j']['url'])
-            user = os.environ.get("DB_USER",data['neo4j']["user"])
-            password = os.environ.get("DB_PASS",data['neo4j']["pass"])
+            uri = os.environ.get("NEO4J_URL",data['neo4j']['url'])
+            user = os.environ.get("NEO4J_USER",data['neo4j']["user"])
+            password = os.environ.get("NEO4J_PASS",data['neo4j']["pass"])
             stoplist =get_stop_words('english')
 
 

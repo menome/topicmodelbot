@@ -10,11 +10,14 @@ module.exports = function(bot) {
     return new Promise((resolve,reject) => {
       execFile("python3",["../topicmodels/lda.py", "-l", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
-          bot.logger.error("Python subprocess failed:", stderr);
+          bot.logger.error("Python subprocess failed:", stderr + '\n' + err);
           return reject(err);
         }
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.        
         return resolve(topics);
+      }).catch((err) => {
+        bot.logger.error("Python Error:", err)
+        return reject(err);
       })
     })
   }
@@ -27,7 +30,7 @@ module.exports = function(bot) {
     return new Promise((resolve,reject) => {
       var child = execFile("python3",["../topicmodels/lda.py", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
-          bot.logger.error("Python subprocess stderr:", stderr);
+          bot.logger.error("Python subprocess stderr:", stderr + '\n' + err);
           bot.logger.error(err);
           return reject(err);
         }
@@ -44,7 +47,11 @@ module.exports = function(bot) {
         })
 
         return resolve(relevant_topics);
+      }).catch((err) => {
+        bot.logger.error("Python Error:", err)
+        return reject(err);
       })
+    
       
       // child.stdin.setEncoding('utf-8');
       child.stdin.write(text);
@@ -63,12 +70,15 @@ module.exports = function(bot) {
       var destination = (dest ? dest: new Date(Date.now()).toISOString())
       execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
-          bot.logger.error("Python subprocess failed:", stderr);
+          bot.logger.error("Python subprocess failed:", stderr + '\n' + err);
           return reject(err);
         }
         var topics = JSON.parse(stdout); // Parse stdout as JSON. Will throw an error on failure.
         bot.logger.info("Topics created: " + topics)        
         return resolve(topics);
+      }).catch((err) => {
+        bot.logger.error("Python Error:", err)
+        return reject(err);
       })
     })
   }
