@@ -4,7 +4,7 @@
  * FPP Bot for running topic modelling related code.
  */
 "use strict";
-const Bot = require('../../botframework');
+const Bot = require('@menome/botframework');
 const config = require("../config/config.json");
 const path = require('path');
 const configSchema = require("./config-schema");
