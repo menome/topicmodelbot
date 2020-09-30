@@ -17,4 +17,4 @@ scipy==1.1.0
 six==1.11.0
 smart-open==1.7.1
 stop-words==2018.7.23
-neo4j-driver==1.7.1
+neo4j-driver==4.1

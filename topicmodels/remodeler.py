@@ -9,7 +9,7 @@ from stop_words import get_stop_words
 ##for topic modeler
 from gensim import corpora, models, similarities, parsing
 ##for graph database access
-from neo4j import GraphDatabase, basic_auth
+from neo4j import GraphDatabase
 
 
 def getNodeFulltext(tx, uuid):
