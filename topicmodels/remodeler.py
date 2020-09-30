@@ -38,7 +38,7 @@ class TopicModeler():
 
 
             #now we need to connect to the database instance so we can add our models to the graph
-            driver = GraphDatabase.driver(uri, auth=(user,password),encrypted=True)
+            driver = GraphDatabase.driver(uri, auth=(user,password),encrypted=os.environ.get("NEO4J_ENCRYPTED",False))
             session = driver.session()
 
             #print("Getting Uuids")
