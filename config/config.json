@@ -7,9 +7,9 @@
   },
   "neo4j": {
     "enable": true,
-    "url": "bolt://localhost:10002",
+    "url": "bolt://localhost",
     "user": "neo4j",
-    "pass": "CodaGlenBaronyMonk"
+    "pass": "GrazingDemoteMurkinessScolding"
   },
   "rabbit": {
     "enable": true,

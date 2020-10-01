@@ -36,12 +36,12 @@ class TopicModeler():
             password = os.environ.get("NEO4J_PASS",data['neo4j']["pass"])
             stoplist =get_stop_words('english')
 
-
+            print("Generating model from database: " + uri)
             #now we need to connect to the database instance so we can add our models to the graph
             driver = GraphDatabase.driver(uri, auth=(user,password),encrypted=os.environ.get("NEO4J_ENCRYPTED",False))
             session = driver.session()
 
-            #print("Getting Uuids")
+            print("Getting Uuids")
             ##now we want to pull our list of uuids for data to model
             uuids = session.read_transaction(lambda tx: getUuids(tx))
             #uuids = uuids[0:5]
@@ -49,11 +49,11 @@ class TopicModeler():
             #now we load the fulltexts so we can start to build a dictionary
             tokensArray = []
             for i,uuid in enumerate(uuids):
-                #print("Pulling record: " + str(i))
+                print("Pulling record: " + str(i))
                 try:
                     fulltext = parsing.preprocessing.preprocess_string(session.read_transaction(lambda tx: getNodeFulltext(tx, uuid))[0])
                 except:
-                    #print("Fulltext for document missing, skipping document.")
+                    print("Fulltext for document missing, skipping document.")
                     continue
 
                 #now we need to tokenize our documents
