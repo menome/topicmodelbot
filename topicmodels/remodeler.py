@@ -13,7 +13,7 @@ from neo4j import GraphDatabase
 
 
 def getNodeFulltext(tx, uuid):
-    return tx.run("MATCH (f {Uuid:{key}}) WHERE f.FullText <> '' RETURN f.FullText",{"key":uuid}).single().values()
+    return tx.run("MATCH (f {Uuid: $key}) WHERE f.FullText <> '' RETURN f.FullText",{"key":uuid}).single().values()
 
 def getUuids(tx):
     return list(tx.run("MATCH (f) where f.FullText <> '' return f.Uuid").value())
