@@ -1,7 +1,7 @@
 /**
  * Wraps the Python topic modeler program.
  */
-const { execFile } = require('child_process');
+const { exec } = require('child_process');
 const crypto = require('crypto');
 const QueryBuilder = require('./queryBuilder');
 var ncp = require('ncp').ncp;
