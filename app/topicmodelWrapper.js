@@ -1,14 +1,14 @@
 /**
  * Wraps the Python topic modeler program.
  */
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 const crypto = require('crypto');
 const QueryBuilder = require('./queryBuilder');
 var ncp = require('ncp').ncp;
 module.exports = function(bot) {
   this.getTopics = function() {
     return new Promise((resolve,reject) => {
-      exec("python3",["../topicmodels/lda.py", "-l", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      execFile("python3",["../topicmodels/lda.py", "-l", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr + '\n' + err);
           return reject(err);
@@ -25,7 +25,7 @@ module.exports = function(bot) {
    */
   this.modelText = function(text) {
     return new Promise((resolve,reject) => {
-      var child = exec("python3",["../topicmodels/lda.py", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      var child = execFile("python3",["../topicmodels/lda.py", "-"],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess stderr:", stderr + '\n' + err);
           bot.logger.error(err);
@@ -62,7 +62,7 @@ module.exports = function(bot) {
     return new Promise((resolve,reject) => {
       bot.logger.info("Generating new model to: " + dest);
       var destination = (dest ? dest: new Date(Date.now()).toISOString())
-      exec("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr + '\n' + err);
           return reject(err);
