@@ -23,7 +23,7 @@ module.exports.checkMetaNode = function(name, checksum) {
 
 module.exports.mergeTopic = function(name, code, checksum) {
   var query = new Query();
-  query.merge("(t:Topic:Facet {Code: $code, Name: $name, ModelSHA256: $checksum})", {name, code, checksum})
+  query.merge("(t:Topic:Card {Code: $code, Name: $name, ModelSHA256: $checksum})", {name, code, checksum})
   query.add("ON CREATE SET t.Uuid = apoc.create.uuid()")
   query.return("t.Uuid as uuid")
   return query;
@@ -31,8 +31,8 @@ module.exports.mergeTopic = function(name, code, checksum) {
 
 module.exports.mergeWord = function(word, topicCode, tmChecksum, weight) {
   var query = new Query();
-  query.match("(t:Topic:Facet {Code: $topicCode, ModelSHA256: $tmChecksum})", {topicCode, tmChecksum})
-  query.merge("(w:Word:Facet {Name: $word})", {word, weight})
+  query.match("(t:Topic:Card {Code: $topicCode, ModelSHA256: $tmChecksum})", {topicCode, tmChecksum})
+  query.merge("(w:Word:Card {Name: $word})", {word, weight})
   query.merge("(w)<-[:HAS_FACET {weight: $weight}]-(t)", {word, weight})
   query.add("ON CREATE SET w.Uuid = apoc.create.uuid()")
   query.return("w.Uuid as uuid")

@@ -64,7 +64,7 @@ module.exports = function(bot) {
 
         Object.keys(topics).forEach((key) => {
           harvesterMessage.Connections.push({
-            'Label':'Facet',
+            'Label':'Card',
             'NodeType':'Topic',
             'RelType':'HAS_FACET',
             'ForwardRel':true,
