@@ -16,7 +16,7 @@ def getNodeFulltext(tx, uuid):
     return tx.run("MATCH (f {Uuid: $key}) WHERE f.FullText <> '' RETURN f.FullText",{"key":uuid}).single().values()
 
 def getUuids(tx):
-    return list(tx.run("MATCH (f) where f.FullText <> '' return f.Uuid").value())
+    return list(tx.run("MATCH (f) where size(f.FullText) > 10 return f.Uuid").value())
 
 class TopicModeler():
     def __init__(self):
