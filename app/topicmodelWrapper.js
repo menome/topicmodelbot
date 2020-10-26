@@ -58,11 +58,12 @@ module.exports = function(bot) {
    * Connects to a graph and pulls fulltext for new model generation
    * @param {*} NumTopics The number of topics to generate
    */
-  this.generateModel = function(numTopics, numPasses, updateAfter,dest){
+  this.generateModel = function(numTopics, numPasses, updateAfter,dest,strip_tags,strip_punctuation,strip_multiple_whitespaces,strip_numeric,strip_short,stem_text){
     return new Promise((resolve,reject) => {
       bot.logger.info("Generating new model to: " + dest);
       var destination = (dest ? dest: new Date(Date.now()).toISOString())
-      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination],{maxBuffer: 2048000,cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
+      execFile("python3",["../topicmodels/remodeler.py", numTopics, numPasses, updateAfter, destination,strip_tags,strip_punctuation,strip_multiple_whitespaces,strip_numeric,strip_short,stem_text],
+      {maxBuffer: 2048000,cwd: __dirname+"/../topicmodels"},(err,stdout,stderr) => {
         if(err) {
           bot.logger.error("Python subprocess failed:", stderr + '\n' + err);
           return reject(err);

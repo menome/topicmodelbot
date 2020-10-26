@@ -26,7 +26,7 @@ class TopicModeler():
 
 
 
-    def generateModel(self, numTopics, numPasses, updateAfter, destination):
+    def generateModel(self, numTopics, numPasses, updateAfter, destination, strip_tags, strip_punctuation, strip_multiple_whitespaces, strip_numeric, strip_short, stem_text)):
         with open(self.CONFIG_ADDRESS) as cfg:
             data = json.load(cfg)
 
@@ -35,6 +35,22 @@ class TopicModeler():
             user = os.environ.get("NEO4J_USER",data['neo4j']["user"])
             password = os.environ.get("NEO4J_PASS",data['neo4j']["pass"])
             stoplist =get_stop_words('english')
+
+
+            CUSTOM_FILTERS = [lambda x: x.lower()]
+            #add filters to gensim
+            if(strip_tags):
+                CUSTOM_FILTERS.append("strip_tags")
+            if(strip_punctuation):
+                CUSTOM_FILTERS.append("strip_punctuation")
+            if(strip_multiple_whitespaces):
+                CUSTOM_FILTERS.append("strip_multiple_whitespaces")   
+            if(strip_numeric):
+                CUSTOM_FILTERS.append("strip_numeric")
+            if(strip_short):
+                CUSTOM_FILTERS.append("strip_short")
+            if(stem_text):
+                CUSTOM_FILTERS.append("stem_text")
 
             #print("Generating model from database: " + uri)
             #now we need to connect to the database instance so we can add our models to the graph
@@ -51,7 +67,7 @@ class TopicModeler():
             for i,uuid in enumerate(uuids):
                 #print("Pulling record: " + str(i))
                 try:
-                    fulltext = parsing.preprocessing.preprocess_string(session.read_transaction(lambda tx: getNodeFulltext(tx, uuid))[0])
+                    fulltext = parsing.preprocessing.preprocess_string(session.read_transaction(lambda tx: getNodeFulltext(tx, uuid))[0],CUSTOM_FILTERS)
                 except:
                     #print("Fulltext for document missing, skipping document.")
                     continue
@@ -102,12 +118,20 @@ def main():
     parser.add_argument("updateAfter", type=int)
     parser.add_argument("destination", type=str)
 
+    parser.add_argument("strip_tags", type=bool)
+    parser.add_argument("strip_punctuation", type=bool)
+    parser.add_argument("strip_multiple_whitespaces", type=bool)
+    parser.add_argument("strip_numeric", type=bool)
+    parser.add_argument("strip_short", type=bool)
+    parser.add_argument("stem_text", type=bool)
+
+
     args = parser.parse_args()
     #print(args.numPasses)
 
     try:
         tm = TopicModeler()
-        print (tm.generateModel(args.numTopics, args.numPasses, args.updateAfter, args.destination))  
+        print (tm.generateModel(args.numTopics, args.numPasses, args.updateAfter, args.destination, args.strip_tags, args.strip_punctuation, args.strip_multiple_whitespaces, args.strip_numeric, args.strip_short, args.stem_text))  
     except Exception as ex:
         print("Caught Exception")
         print(ex)
